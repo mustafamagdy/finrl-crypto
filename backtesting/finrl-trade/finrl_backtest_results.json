@@ -1,0 +1,16 @@
+{
+  "total_return": 58.91388724054565,
+  "buy_hold_return": 81.14168824655586,
+  "excess_return": -22.227801006010218,
+  "final_portfolio_value": 158913.88724054565,
+  "initial_capital": 100000,
+  "sharpe_ratio": 1.9785787140121385,
+  "volatility": 30.634632513603467,
+  "max_drawdown": 20.872652669532997,
+  "calmar_ratio": 2.8225395292731514,
+  "total_trades": 1424,
+  "winning_trades": 250,
+  "win_rate": 17.5561797752809,
+  "final_btc_price": 75566.55141884756,
+  "initial_btc_price": 41716.81966218196
+}

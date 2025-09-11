@@ -1,0 +1,44 @@
+{
+  "algorithm-type-name": "FinRLCryptoTradingAlgorithm",
+  "algorithm-language": "Python",
+  "algorithm-location": "main.py",
+  "description": "FinRL-trained PPO model for Bitcoin trading with comprehensive risk management",
+  
+  "parameters": {
+    "start-date": "20240101",
+    "end-date": "20241231",
+    "cash": 100000,
+    "symbol": "BTCUSD",
+    "resolution": "Hour",
+    "max-position-size": 0.95,
+    "stop-loss-pct": 0.05,
+    "take-profit-pct": 0.15,
+    "max-drawdown-pct": 0.20
+  },
+  
+  "data-sources": {
+    "crypto": ["BTCUSD"],
+    "resolution": "Hour",
+    "market": "Crypto",
+    "data-normalization-mode": "Raw"
+  },
+  
+  "risk-management": {
+    "max-drawdown": 0.20,
+    "position-sizing": "Model-Based",
+    "stop-loss": 0.05,
+    "take-profit": 0.15
+  },
+  
+  "model-info": {
+    "name": "PPO Bitcoin Trading Model",
+    "framework": "FinRL + Stable-Baselines3",
+    "algorithm": "PPO",
+    "training-period": "2022-2024",
+    "features": ["MACD", "RSI", "Bollinger Bands", "CCI", "DX", "SMA"],
+    "model-file": "crypto_btcusdt_real_fixed_model.zip"
+  },
+  
+  "environment": "backtesting",
+  "live-mode": false
+}
