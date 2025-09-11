@@ -180,7 +180,7 @@ def train_single_crypto(symbol, df, results_dict):
                 'profit': profit,
                 'final_value': final_value,
                 'buy_hold_return': buy_hold_return,
-                'sharpe_ratio': sharpe,
+                'sharpe': sharpe,
                 'max_drawdown': max_drawdown,
                 'volatility': volatility * 100,
                 'training_time': str(training_time),
@@ -267,7 +267,7 @@ def main():
     if successful_results:
         avg_algo_return = np.mean([r['algorithm_return'] for r in successful_results.values()])
         avg_data_return = np.mean([r['data_return'] for r in successful_results.values()])
-        avg_sharpe = np.mean([r['sharpe_ratio'] for r in successful_results.values()])
+        avg_sharpe = np.mean([r['sharpe'] for r in successful_results.values()])
         
         print(f"   Average Algorithm Return: {avg_algo_return:+.2f}%")
         print(f"   Average Data Return: {avg_data_return:+.2f}%")
