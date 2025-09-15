@@ -408,28 +408,45 @@ class TransformerDRLTrainer5Min:
         # Load best model
         self.transformer.load_state_dict(torch.load("best_transformer_5min.pth"))
         
-        # Final validation on test set
+        # Final validation on test set (memory-optimized batching)
         print("📊 Evaluating on test set...")
         self.transformer.eval()
         
+        test_predictions = []
+        test_targets_list = []
+        batch_size = 1000  # Smaller batches for memory efficiency
+        
         with torch.no_grad():
-            test_outputs = self.transformer(X_test)
-            test_predictions = test_outputs['action'].cpu().numpy().flatten()
-            test_targets = y_test.cpu().numpy().flatten()
-            
-            # Calculate metrics
-            mse = mean_squared_error(test_targets, test_predictions)
-            mae = mean_absolute_error(test_targets, test_predictions)
-            r2 = r2_score(test_targets, test_predictions)
-            
-            # Directional accuracy
-            direction_correct = np.sum((test_predictions > 0) == (test_targets > 0)) / len(test_targets)
-            
-            # Volatility metrics
-            pred_vol = np.std(test_predictions)
-            actual_vol = np.std(test_targets)
-            
-            self.validation_results = {
+            for i in range(0, len(X_test), batch_size):
+                batch_end = min(i + batch_size, len(X_test))
+                X_batch = X_test[i:batch_end]
+                y_batch = y_test[i:batch_end]
+                
+                batch_outputs = self.transformer(X_batch)
+                test_predictions.extend(batch_outputs['action'].cpu().numpy().flatten())
+                test_targets_list.extend(y_batch.cpu().numpy().flatten())
+                
+                # Clear cache periodically
+                if i % (batch_size * 10) == 0:
+                    torch.mps.empty_cache() if torch.backends.mps.is_available() else None
+                    print(f"  Processed {i + len(X_batch)}/{len(X_test)} test samples...")
+        
+        test_predictions = np.array(test_predictions)
+        test_targets = np.array(test_targets_list)
+        
+        # Calculate metrics
+        mse = mean_squared_error(test_targets, test_predictions)
+        mae = mean_absolute_error(test_targets, test_predictions)
+        r2 = r2_score(test_targets, test_predictions)
+        
+        # Directional accuracy
+        direction_correct = np.sum((test_predictions > 0) == (test_targets > 0)) / len(test_targets)
+        
+        # Volatility metrics
+        pred_vol = np.std(test_predictions)
+        actual_vol = np.std(test_targets)
+        
+        self.validation_results = {
                 'test_mse': mse,
                 'test_mae': mae, 
                 'test_r2': r2,
@@ -438,15 +455,15 @@ class TransformerDRLTrainer5Min:
                 'actual_volatility': actual_vol,
                 'best_val_loss': best_val_loss,
                 'total_epochs': epoch + 1
-            }
-            
-            print(f"🏆 Test Results:")
-            print(f"  MSE: {mse:.6f}")
-            print(f"  MAE: {mae:.6f}")
-            print(f"  R²: {r2:.6f}")
-            print(f"  Direction Accuracy: {direction_correct:.3f}")
-            print(f"  Predicted Vol: {pred_vol:.4f}")
-            print(f"  Actual Vol: {actual_vol:.4f}")
+        }
+        
+        print(f"🏆 Test Results:")
+        print(f"  MSE: {mse:.6f}")
+        print(f"  MAE: {mae:.6f}")
+        print(f"  R²: {r2:.6f}")
+        print(f"  Direction Accuracy: {direction_correct:.3f}")
+        print(f"  Predicted Vol: {pred_vol:.4f}")
+        print(f"  Actual Vol: {actual_vol:.4f}")
         
         print("✅ Transformer pre-training completed!")
         
