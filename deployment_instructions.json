@@ -1,0 +1,20 @@
+{
+  "lambda_labs": {
+    "name": "Lambda Labs",
+    "setup": "\n# Lambda Labs Setup Instructions:\n1. Go to lambdalabs.com and create account\n2. Choose instance type: RTX A6000 (48GB VRAM recommended)\n3. Select image: PyTorch 2.0+ with CUDA 12.1\n4. Launch instance and SSH into it\n5. Upload the deployment package:\n   scp enhanced_transformer_deployment.zip user@instance_ip:/home/user/\n6. Unzip and install:\n   unzip enhanced_transformer_deployment.zip\n   pip install -r requirements.txt\n7. Start Jupyter notebook:\n   jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser\n8. Access notebook in browser\n            ",
+    "expected_cost": "$0.60/hour = ~$6-12 total",
+    "training_time": "6-8 hours"
+  },
+  "vast_ai": {
+    "name": "Vast.ai",
+    "setup": "\n# Vast.ai Setup Instructions:\n1. Go to vast.ai and create account\n2. Browse marketplace for RTX 4090 or A6000\n3. Filter for: PyTorch, Docker, >=24GB VRAM\n4. Rent instance and get SSH credentials\n5. Upload deployment package:\n   scp enhanced_transformer_deployment.zip user@instance_ip:~/\n6. Connect and setup:\n   ssh user@instance_ip\n   unzip enhanced_transformer_deployment.zip\n   pip install -r requirements.txt\n7. Start notebook:\n   jupyter notebook --allow-root --ip=0.0.0.0 --port=8888\n            ",
+    "expected_cost": "$0.30/hour = ~$3-6 total",
+    "training_time": "8-12 hours"
+  },
+  "colab": {
+    "name": "Google Colab Pro",
+    "setup": "\n# Google Colab Setup Instructions:\n1. Upload deployment package to Google Drive\n2. Open Colab and mount Drive:\n   from google.colab import drive\n   drive.mount('/content/drive')\n3. Copy files to Colab environment:\n   !cp /content/drive/MyDrive/enhanced_transformer_deployment.zip /content/\n   !unzip enhanced_transformer_deployment.zip\n4. Install requirements:\n   !pip install -r requirements.txt\n5. Upload and open the notebook\n6. Set runtime to GPU (Runtime -> Change runtime type)\n            ",
+    "expected_cost": "$10/month unlimited",
+    "training_time": "8-12 hours"
+  }
+}
